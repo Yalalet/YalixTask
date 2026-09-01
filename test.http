@@ -1,0 +1,49 @@
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{"name": "Иван"}
+
+###
+GET http://localhost:8080/users
+
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{"name": "Maria"}
+
+###
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{"first_name": "Иван", "last_name": "Iggg" , "login": "JJJJJJJEwd" , "email": "ivgga2ffn@mail.com", "password": "2ffdfdfdfdfd3"}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{"login": "JJJJJJJEwd", "password": "2ffdfdfdfdfd3"}
+
+###
+GET http://localhost:8080/login
+
+###
+GET http://localhost:8080/roles
+
+###
+GET http://localhost:8080/prioritys
+
+###
+GET http://localhost:8080/taskstatuses
+
+###
+GET http://localhost:8080/teamroles
+
+###
+GET http://localhost:8080/tasks
+
+###
+GET http://localhost:8080/taskassignees
+
+###
+GET http://localhost:8080/teamuser

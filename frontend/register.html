@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Создать аккаунт — Yalix</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Yalix logo">
+        <a href="index.html" class="brand-link"><span class="brand-mark">Y</span><span class="brand-text">Yalix</span></a>
+      </div>
+
+      <div class="auth-actions">
+        <a class="auth-btn login-btn" href="index.html">Назад</a>
+      </div>
+    </header>
+
+    <main class="auth-main">
+      <div class="container">
+        <h1>Создать аккаунт</h1>
+        <form id="registerForm" class="task-form">
+          <div class="field">
+            <label for="regFirstName">Имя</label>
+            <input id="regFirstName" type="text" placeholder="Ваше имя" required />
+          </div>
+
+          <div class="field">
+            <label for="regLastName">Фамилия</label>
+            <input id="regLastName" type="text" placeholder="Ваша фамилия" required />
+          </div>
+
+          <div class="field">
+            <label for="regLogin">Логин</label>
+            <input id="regLogin" type="text" placeholder="Придумайте логин" required minlength="3" />
+          </div>
+
+          <div class="field">
+            <label for="regEmail">Электронная почта</label>
+            <input id="regEmail" type="email" placeholder="email@example.com" required />
+          </div>
+
+          <div class="field">
+            <label for="regPassword">Пароль</label>
+            <input id="regPassword" type="password" placeholder="Пароль" required minlength="6" />
+          </div>
+
+          <div class="field">
+            <label for="regPassword2">Подтвердите пароль</label>
+            <input id="regPassword2" type="password" placeholder="Повторите пароль" required minlength="6" />
+          </div>
+
+          <div class="auth-actions-inline auth-actions-inline-right">
+            <button type="submit" class="edit-btn">Создать аккаунт</button>
+          </div>
+        </form>
+      </div>
+    </main>
+
+    <footer class="footer-bar">
+      <span>Поддержка: <a href="mailto:YalixHelp@gmail.com">YalixHelp@gmail.com</a></span>
+    </footer>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/register.js"></script>
+</body>
+</html>

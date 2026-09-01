@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Команды — Yalix</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Yalix logo">
+        <a href="index.html" class="brand-link"><span class="brand-mark">Y</span><span class="brand-text">Yalix</span></a>
+      </div>
+      <div class="auth-actions">
+        <a class="auth-btn login-btn" href="people.html">Пользователи</a>
+      </div>
+    </header>
+
+    <main class="people-page">
+      <section class="people-header">
+        <div>
+          <p class="eyebrow">Команды</p>
+          <h1>Управление командами</h1>
+        </div>
+        <a class="auth-btn login-btn" href="index.html" onclick="window.location.href='index.html'; return false;">На главную</a>
+      </section>
+
+      <section class="people-panel">
+        <div class="people-toolbar">
+          <button id="refreshTeamsBtn" class="edit-btn" type="button">Обновить</button>
+          <a href="#" id="createTeamBtn" class="edit-btn">Создать команду</a>
+        </div>
+
+        <div id="teamsLoading" class="people-status">Загрузка команд...</div>
+        <div id="teamsError" class="people-status error hidden"></div>
+        <ul id="teamsList" class="people-list" aria-live="polite"></ul>
+      </section>
+    </main>
+
+    <footer class="footer-bar">
+      <span>Поддержка: <a href="mailto:YalixHelp@gmail.com">YalixHelp@gmail.com</a></span>
+    </footer>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/teams.js"></script>
+  <!-- При желании: расширить js/teams.js функциями создания/редактирования команд -->
+</body>
+</html>

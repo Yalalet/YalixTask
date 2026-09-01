@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Список людей — Yalix</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Yalix logo">
+          <span class="brand-mark">Y</span>
+          <span class="brand-text">Yalix</span>
+          <span class="brand-tag">people</span>
+        </div>
+      </header>
+
+      <main class="people-page">
+        <section class="people-header">
+          <div>
+            <p class="eyebrow">Пользователи</p>
+            <h1>Список людей</h1>
+          </div>
+          <a class="auth-btn login-btn" href="./index.html" onclick="window.location.href='./index.html'; return false;">На главную</a>
+        </section>
+
+        <section class="people-panel">
+          <div class="people-toolbar">
+            <button id="refreshPeopleBtn" class="edit-btn" type="button">Обновить список</button>
+          </div>
+
+          <div id="peopleLoading" class="people-status">Загрузка пользователей...</div>
+          <div id="peopleError" class="people-status error hidden"></div>
+          <ul id="peopleList" class="people-list" aria-live="polite"></ul>
+        </section>
+      </main>
+
+      <footer class="footer-bar">
+        <span>Поддержка: <a href="mailto:YalixHelp@gmail.com">YalixHelp@gmail.com</a></span>
+        <span class="divider">|</span>
+        <a href="https://github.com/Yalalet" target="_blank" rel="noreferrer">github.com/Yalalet</a>
+      </footer>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/people.js"></script>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Календарь — Yalix</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell calendar-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="Yalix logo">
+          <span class="brand-mark">Y</span>
+          <span class="brand-text">Yalix</span>
+          <span class="brand-tag">planner</span>
+        </div>
+      </header>
+
+      <main class="calendar-page">
+        <section class="calendar-panel">
+          <div class="calendar-toolbar">
+            <div>
+              <p class="eyebrow">Планировщик</p>
+              <h1>Календарь</h1>
+            </div>
+
+            <div class="calendar-controls">
+              <button id="monthTabBtn" class="auth-btn signup-btn active" type="button">Месяц</button>
+              <button id="weekTabBtn" class="auth-btn login-btn" type="button">Неделя</button>
+            </div>
+          </div>
+
+          <div class="calendar-nav">
+            <button id="prevBtn" class="auth-btn login-btn" type="button">← Назад</button>
+
+            <div class="calendar-inline-controls">
+              <button id="todayBtn" class="auth-btn login-btn" type="button">Сегодня</button>
+
+              <label class="month-select-wrap">
+                <span>Месяц</span>
+                <select id="monthSelect" aria-label="Выберите месяц"></select>
+              </label>
+
+              <label class="year-select-wrap">
+                <span>Год</span>
+                <select id="yearSelect" aria-label="Выберите год"></select>
+              </label>
+            </div>
+
+            <div id="calendarTitle" class="month-label">Август 2026</div>
+            <button id="nextBtn" class="auth-btn signup-btn" type="button">Вперёд →</button>
+          </div>
+
+          <div id="calendarView" class="calendar-view"></div>
+        </section>
+      </main>
+
+      <div id="eventModal" class="event-modal hidden" aria-hidden="true">
+        <div class="event-modal-backdrop" data-close-modal="true"></div>
+        <div class="event-modal-card" role="dialog" aria-modal="true" aria-labelledby="eventModalTitle">
+          <div class="event-modal-header">
+            <h2 id="eventModalTitle">Задачи</h2>
+            <button id="closeEventModal" class="modal-close-btn" type="button" aria-label="Закрыть">×</button>
+          </div>
+
+          <div id="taskList" class="task-list" aria-live="polite"></div>
+
+          <div class="event-modal-divider"></div>
+
+          <form id="eventForm" class="event-form">
+            <label class="field">
+              <span>Дата начала</span>
+              <input id="eventStartDate" type="date" required />
+            </label>
+
+            <label class="field">
+              <span>Дата окончания</span>
+              <input id="eventEndDate" type="date" required />
+            </label>
+
+            <label class="field">
+              <span>Время начала</span>
+              <input id="eventStartTime" type="time" required />
+            </label>
+
+            <label class="field">
+              <span>Задача</span>
+              <input id="eventText" type="text" maxlength="80" placeholder="Например: Встреча с командой" required />
+            </label>
+
+            <div class="event-modal-actions">
+              <button type="button" id="cancelEventModal" class="auth-btn login-btn">Отмена</button>
+              <button type="submit" class="auth-btn signup-btn">Добавить</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <footer class="footer-bar">
+        <span>Поддержка: <a href="mailto:YalixHelp@gmail.com">YalixHelp@gmail.com</a></span>
+        <span class="divider">|</span>
+        <a href="https://github.com/Yalalet" target="_blank" rel="noreferrer">github.com/Yalalet</a>
+      </footer>
+    </div>
+
+    <script src="js/calendar-view.js"></script>
+  </body>
+</html>
