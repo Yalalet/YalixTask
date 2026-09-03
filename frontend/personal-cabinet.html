@@ -3,20 +3,17 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yalix</title>
+  <title>Личный кабинет — Yalix</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body data-requires-auth="true">
   <div class="page-shell">
     <header class="topbar">
       <div class="brand" aria-label="Yalix logo">
-        <span class="brand-mark">Y</span>
-        <span class="brand-text">Yalix</span>
-        <span class="brand-tag">task</span>
+        <a href="index.html" class="brand-link"><span class="brand-mark">Y</span><span class="brand-text">Yalix</span></a>
       </div>
       <div class="auth-actions">
-        <a id="headerLoginLink" class="auth-btn signup-btn" href="login.html">Войти</a>
-        <button id="logoutBtn" class="auth-btn login-btn hidden" type="button">Выйти</button>
+        <button id="logoutBtn" class="auth-btn login-btn" type="button">Выйти</button>
       </div>
     </header>
 
@@ -26,14 +23,14 @@
           <div id="profileAvatar" class="profile-avatar" aria-hidden="true">?</div>
           <div>
             <p class="eyebrow">Личный кабинет</p>
-            <h1 id="profileName">Гость</h1>
-            <p id="profileLogin" class="profile-login">Войдите, чтобы открыть профиль</p>
+            <h1 id="profileName">Пользователь</h1>
+            <p id="profileLogin" class="profile-login"></p>
           </div>
         </div>
-        <p id="profileEmail" class="hero-text">Управляйте задачами и просматривайте рабочую информацию в одном месте.</p>
+        <p id="profileEmail" class="hero-text"></p>
 
         <div class="hero-actions">
-          <a id="calendarLink" class="auth-btn signup-btn" href="calendar-view.html">Открыть календарь</a>
+          <a class="auth-btn signup-btn" href="calendar-view.html">Открыть календарь</a>
           <a class="auth-btn login-btn" href="people.html">Список людей</a>
           <a class="auth-btn login-btn" href="teams.html">Команды</a>
         </div>
@@ -45,17 +42,15 @@
           <strong id="taskCount" class="stat-value">—</strong>
           <p>Всего задач в системе</p>
         </article>
-
         <article class="info-card">
           <span class="stat-label">Роль</span>
           <strong id="profileRole" class="stat-value">—</strong>
           <p>Текущий уровень доступа</p>
         </article>
-
         <article class="info-card">
           <span class="stat-label">Статус</span>
-          <strong id="profileStatus" class="stat-value">Гость</strong>
-          <p id="profileStatusText">Авторизуйтесь для работы с аккаунтом</p>
+          <strong id="profileStatus" class="stat-value">Активен</strong>
+          <p id="profileStatusText">Сессия пользователя активна</p>
         </article>
       </section>
     </main>

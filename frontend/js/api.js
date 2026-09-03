@@ -67,12 +67,14 @@ async function parseErrorMessage(response, fallbackMessage) {
 
 async function apiRequest(path, options = {}) {
   let lastError = null;
+  const token = sessionStorage.getItem('yalix_token') || localStorage.getItem('yalix_token');
 
   for (const base of API_BASE_URL_CANDIDATES) {
     try {
       const response = await fetch(`${base}${path}`, {
         headers: {
           'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
           ...(options.headers || {})
         },
         ...options

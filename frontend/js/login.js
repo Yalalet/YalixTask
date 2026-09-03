@@ -29,10 +29,21 @@ if (form && identifier && pass) {
 
       const responseUser = data && typeof data === 'object' ? data.user || data.profile || data : null;
       const responseLogin = responseUser?.login || responseUser?.username || responseUser?.name || loginValue;
+      const storage = document.getElementById('rememberMe')?.checked ? localStorage : sessionStorage;
+      if (data?.token) {
+        localStorage.removeItem('yalix_token');
+        sessionStorage.removeItem('yalix_token');
+        storage.setItem('yalix_token', data.token);
+      }
+      if (responseUser) {
+        localStorage.removeItem('yalix_user');
+        sessionStorage.removeItem('yalix_user');
+        storage.setItem('yalix_user', JSON.stringify(responseUser));
+      }
 
       alert(`Вход выполнен успешно для ${responseLogin}`);
       form.reset();
-      window.location.href = 'people.html';
+      window.location.href = 'personal-cabinet.html';
     } catch (error) {
       console.error('Login error:', error);
       const message = error?.serverMessage || error?.message || 'неизвестная ошибка';
