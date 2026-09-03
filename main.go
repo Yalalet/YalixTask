@@ -90,14 +90,14 @@ func main() {
 	teamUserHandler := &handlers.TeamUserHandler{Service: teamUserService}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/users", userHandler.Users)
+	mux.HandleFunc("/users", handlers.AuthMiddleware(userHandler.Users))
 	mux.HandleFunc("/login", userHandler.Login)
-	mux.HandleFunc("/roles", roleHandler.Roles)
-	mux.HandleFunc("/prioritys", priorityHandler.Prioritys)
-	mux.HandleFunc("/teamroles", teamRoleHandler.TeamRoles)
+	mux.HandleFunc("/roles", handlers.AuthMiddleware(roleHandler.Roles))
+	mux.HandleFunc("/prioritys", handlers.AdminOnlyMiddleware(handlers.AuthMiddleware(priorityHandler.Prioritys)))
+	mux.HandleFunc("/teamroles", handlers.AdminOnlyMiddleware(handlers.AuthMiddleware(teamRoleHandler.TeamRoles)))
 	mux.HandleFunc("/taskstatuses", taskStatusHandler.TaskStatuses)
-	mux.HandleFunc("/teams", teamHandler.Teams)
-	mux.HandleFunc("/tasks", taskHandler.Tasks)
+	mux.HandleFunc("/teams", handlers.AuthMiddleware(teamHandler.Teams))
+	mux.HandleFunc("/tasks", handlers.AuthMiddleware(taskHandler.Tasks))
 	mux.HandleFunc("/taskassignees", taskAssigneeHandler.TaskAssignees)
 	mux.HandleFunc("/teamuser", teamUserHandler.TeamUsers)
 

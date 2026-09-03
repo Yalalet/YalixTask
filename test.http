@@ -47,3 +47,8 @@ GET http://localhost:8080/taskassignees
 
 ###
 GET http://localhost:8080/teamuser
+
+
+### test of authorization
+GET http://localhost:8080/teamroles
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODg0OTgyMDksInVzZXJfaWQiOjF9.2GMMBqg4vAzKJ8zwFeOzRlDYxelg9kr-asbR1GbsvV0
