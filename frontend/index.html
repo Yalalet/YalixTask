@@ -14,48 +14,37 @@
         <span class="brand-text">Yalix</span>
         <span class="brand-tag">task</span>
       </div>
-      <div class="auth-actions">
-        <a id="headerLoginLink" class="auth-btn signup-btn" href="login.html">Войти</a>
-        <button id="logoutBtn" class="auth-btn login-btn hidden" type="button">Выйти</button>
-      </div>
     </header>
 
     <main class="dashboard-shell">
       <section class="hero-card">
-        <div class="profile-heading">
-          <div id="profileAvatar" class="profile-avatar" aria-hidden="true">?</div>
-          <div>
-            <p class="eyebrow">Личный кабинет</p>
-            <h1 id="profileName">Гость</h1>
-            <p id="profileLogin" class="profile-login">Войдите, чтобы открыть профиль</p>
-          </div>
-        </div>
-        <p id="profileEmail" class="hero-text">Управляйте задачами и просматривайте рабочую информацию в одном месте.</p>
+        <p class="eyebrow">Yalix</p>
+        <h1>Личный кабинет</h1>
+        <p class="hero-text">
+          Здесь будет основное пространство приложения: профиль, задачи, аналитика и управление аккаунтом.
+        </p>
 
         <div class="hero-actions">
-          <a id="calendarLink" class="auth-btn signup-btn" href="calendar-view.html">Открыть календарь</a>
+          <a class="auth-btn signup-btn" href="login.html">Перейти к входу</a>
           <a class="auth-btn login-btn" href="people.html">Список людей</a>
           <a class="auth-btn login-btn" href="teams.html">Команды</a>
         </div>
       </section>
 
-      <section class="info-grid profile-stats">
+      <section class="info-grid">
         <article class="info-card">
-          <span class="stat-label">Задачи</span>
-          <strong id="taskCount" class="stat-value">—</strong>
-          <p>Всего задач в системе</p>
+          <h2>Профиль</h2>
+          <p>Просмотр и редактирование данных пользователя.</p>
         </article>
 
         <article class="info-card">
-          <span class="stat-label">Роль</span>
-          <strong id="profileRole" class="stat-value">—</strong>
-          <p>Текущий уровень доступа</p>
+          <h2>Задачи</h2>
+          <p>Список задач и история действий будет подключена позже.</p>
         </article>
 
         <article class="info-card">
-          <span class="stat-label">Статус</span>
-          <strong id="profileStatus" class="stat-value">Гость</strong>
-          <p id="profileStatusText">Авторизуйтесь для работы с аккаунтом</p>
+          <h2>Статус</h2>
+          <p>Панель с состоянием и прогрессом работы.</p>
         </article>
       </section>
     </main>
@@ -66,8 +55,5 @@
       <a href="https://github.com/Yalalet" target="_blank" rel="noreferrer">github.com/Yalalet</a>
     </footer>
   </div>
-
-  <script src="js/api.js"></script>
-  <script src="js/app.js"></script>
 </body>
 </html>
