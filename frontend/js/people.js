@@ -17,7 +17,10 @@ function renderPeople(users) {
   peopleList.innerHTML = '';
 
   if (!Array.isArray(users) || users.length === 0) {
-    peopleList.innerHTML = '<li class="people-empty">Пользователи не найдены.</li>';
+    const emptyState = document.createElement('li');
+    emptyState.className = 'people-empty';
+    emptyState.textContent = 'Пользователи не найдены.';
+    peopleList.appendChild(emptyState);
     peopleLoading.classList.add('hidden');
     peopleError.classList.add('hidden');
     return;
@@ -28,22 +31,40 @@ function renderPeople(users) {
     const li = document.createElement('li');
     li.className = 'person-card';
 
-    const initials = (safeUser.name || 'U')
+    const displayName = typeof safeUser.name === 'string' ? safeUser.name : 'Пользователь';
+    const initials = displayName
       .split(' ')
       .map((part) => part[0])
       .join('')
       .slice(0, 2)
       .toUpperCase();
 
-    li.innerHTML = `
-      <div class="person-avatar">${initials}</div>
-      <div class="person-info">
-        <div class="person-name">${safeUser.name || 'Без имени'}</div>
-          <div class="person-login">@${safeUser.login || safeUser.username || '—'}</div>
-          <div class="person-role">Роль: ${safeUser.role_name || 'Роль не указана'}</div>
-      </div>
-      <span class="person-id">#${safeUser.id ?? 'N/A'}</span>
-    `;
+    const avatar = document.createElement('div');
+    avatar.className = 'person-avatar';
+    avatar.textContent = initials || 'U';
+
+    const info = document.createElement('div');
+    info.className = 'person-info';
+
+    const name = document.createElement('div');
+    name.className = 'person-name';
+    name.textContent = displayName || 'Без имени';
+
+    const login = document.createElement('div');
+    login.className = 'person-login';
+    login.textContent = `@${safeUser.login || safeUser.username || '—'}`;
+
+    const role = document.createElement('div');
+    role.className = 'person-role';
+    role.textContent = `Роль: ${safeUser.role_name || 'Роль не указана'}`;
+
+    info.append(name, login, role);
+
+    const id = document.createElement('span');
+    id.className = 'person-id';
+    id.textContent = `#${safeUser.id ?? 'N/A'}`;
+
+    li.append(avatar, info, id);
 
     peopleList.appendChild(li);
   });

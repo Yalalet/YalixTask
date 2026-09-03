@@ -21,8 +21,8 @@ if (form && firstNameInput && lastNameInput && loginInput && emailInput && passI
       alert('Заполните имя, фамилию, логин и почту.');
       return;
     }
-    if (p1.length < 6) {
-      alert('Пароль должен быть минимум 6 символов.');
+    if (p1.length < 8) {
+      alert('Пароль должен быть минимум 8 символов.');
       return;
     }
     if (p1 !== p2) {
