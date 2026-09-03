@@ -21,9 +21,9 @@ func (r *UserRepository) GetUserByLogin(login string) (*models.User, error) {
 
 func (r *UserRepository) CreateUser(user *models.User) error {
 	err := r.DB.QueryRow(
-		`INSERT INTO users (first_name , last_name , login , email, password_hash) 
-		VALUES ($1, $2, $3, $4 , $5) RETURNING id`,
-		user.FirstName, user.LastName, user.Login, user.Email, user.PasswordHash,
+		`INSERT INTO users (first_name , last_name , login , email, password_hash, role_id) 
+		VALUES ($1, $2, $3, $4 , $5 , $6) RETURNING id`,
+		user.FirstName, user.LastName, user.Login, user.Email, user.PasswordHash, user.RoleID,
 	).Scan(&user.ID)
 
 	return err
@@ -31,7 +31,7 @@ func (r *UserRepository) CreateUser(user *models.User) error {
 
 func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 	rows, err := r.DB.Query(`
-		SELECT u.id, u.last_name, u.first_name, u.email, u.login, r.name , u.role_id AS role_name
+		SELECT u.id, u.last_name, u.first_name, u.email, u.login, r.name AS role_name , u.role_id
 		FROM users u
 		LEFT JOIN roles r ON u.role_id = r.id
 	`)
@@ -48,6 +48,10 @@ func (r *UserRepository) GetAllUsers() ([]models.User, error) {
 			return nil, err
 		}
 		users = append(users, user)
+
+		if err := rows.Err(); err != nil {
+			return nil, err
+		}
 	}
 	return users, nil
 }

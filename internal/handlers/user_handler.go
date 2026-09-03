@@ -3,6 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"log"
+	"myapp/internal/models"
 	"myapp/internal/service"
 	"net/http"
 )
@@ -17,6 +19,8 @@ func (h *UserHandler) Users(w http.ResponseWriter, r *http.Request) {
 		h.createUser(w, r)
 	case "GET":
 		h.listUsers(w, r)
+	default:
+		http.Error(w, "метод не поддерживается", http.StatusMethodNotAllowed)
 	}
 }
 
@@ -41,7 +45,7 @@ func (h *UserHandler) loginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.Service.Login(loginInput.Login, loginInput.Password)
+	user, token, err := h.Service.Login(loginInput.Login, loginInput.Password)
 	if err != nil {
 		if errors.Is(err, service.ErrInvalidCredentials) {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -52,7 +56,15 @@ func (h *UserHandler) loginUser(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	json.NewEncoder(w).Encode(user)
+	loginResponse := struct {
+		User  *models.User `json:"user"`
+		Token string       `json:"token"`
+	}{
+		User:  user,
+		Token: token,
+	}
+
+	json.NewEncoder(w).Encode(loginResponse)
 }
 
 func (h *UserHandler) createUser(w http.ResponseWriter, r *http.Request) {
@@ -61,19 +73,9 @@ func (h *UserHandler) createUser(w http.ResponseWriter, r *http.Request) {
 		ID        int    `json:"id"`
 		FirstName string `json:"first_name"`
 		LastName  string `json:"last_name"`
-		//MiddleName   *string    `json:"middle_name,omitempty"`
-		Login    string `json:"login"`
-		Email    string `json:"email"`
-		Password string `json:"password"`
-		//Avatar       *string    `json:"avatar,omitempty"`
-		//Phone        *string    `json:"phone,omitempty"`
-		//GitHub       *string    `json:"github,omitempty"`
-		//RoleID    int       `json:"role_id"`
-		//IsActive  bool      `json:"is_active"`
-		//CreatedAt time.Time `json:"created_at"`
-		//UpdatedAt time.Time `json:"updated_at"`
-		//DeletedAt    *time.Time `json:"deleted_at,omitempty"`
-		//LastLoginAt  *time.Time `json:"last_login_at,omitempty"`
+		Login     string `json:"login"`
+		Email     string `json:"email"`
+		Password  string `json:"password"`
 	}
 
 	err := json.NewDecoder(r.Body).Decode(&userInput)
@@ -84,8 +86,24 @@ func (h *UserHandler) createUser(w http.ResponseWriter, r *http.Request) {
 
 	user, err := h.Service.Register(userInput.FirstName, userInput.LastName, userInput.Login, userInput.Email, userInput.Password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		switch {
+		case errors.Is(err, service.ErrMissingFields):
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		case errors.Is(err, service.ErrInvalidEmail):
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		case errors.Is(err, service.ErrInvalidPassword):
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		case errors.Is(err, service.ErrXSS):
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		default:
+			log.Printf("Ошибка при создании пользователя: %v", err)
+			http.Error(w, service.ErrServerError.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
 
 	json.NewEncoder(w).Encode(user)
@@ -93,9 +111,17 @@ func (h *UserHandler) createUser(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) listUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := h.Service.GetAll()
+
 	if err != nil {
+
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
+	}
+
+	for i := range users {
+		users[i].FirstName = inputSanitization(users[i].FirstName)
+		users[i].LastName = inputSanitization(users[i].LastName)
+		users[i].Login = inputSanitization(users[i].Login)
 	}
 
 	json.NewEncoder(w).Encode(users)

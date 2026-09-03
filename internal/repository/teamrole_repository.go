@@ -35,5 +35,10 @@ func (r *TeamRoleRepository) GetAllTeamRoles() ([]models.TeamRole, error) {
 		}
 		teamroles = append(teamroles, teamrole)
 	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
 	return teamroles, nil
 }

@@ -18,6 +18,8 @@ func (h *TaskHandler) Tasks(w http.ResponseWriter, r *http.Request) {
 		h.createTask(w, r)
 	case "GET":
 		h.listTasks(w, r)
+	default:
+		http.Error(w, "метод не поддерживается", http.StatusMethodNotAllowed)
 	}
 }
 

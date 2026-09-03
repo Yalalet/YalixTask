@@ -7,22 +7,29 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const defaultRoleID = 2
+
 type UserService struct {
 	Repo *repository.UserRepository
 }
 
-func (s *UserService) Login(login, password string) (*models.User, error) {
+func (s *UserService) Login(login, password string) (*models.User, string, error) {
 	user, err := s.Repo.GetUserByLogin(login)
 	if err != nil {
-		return nil, ErrInvalidCredentials
+		return nil, "", ErrInvalidCredentials
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
-		return nil, ErrInvalidCredentials
+		return nil, "", ErrInvalidCredentials
 	}
 
-	return user, nil
+	token, err := GenerateToken(user.ID)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, token, nil
 }
 
 func (s *UserService) Register(firstname, lastname, login, email, password string) (*models.User, error) {
@@ -33,6 +40,10 @@ func (s *UserService) Register(firstname, lastname, login, email, password strin
 
 	if !isValidEmail(email) {
 		return nil, ErrInvalidEmail
+	}
+
+	if containsHTML(firstname) || containsHTML(lastname) || containsHTML(login) {
+		return nil, ErrXSS
 	}
 
 	if len(password) < 8 {
@@ -50,6 +61,7 @@ func (s *UserService) Register(firstname, lastname, login, email, password strin
 		LastName:     lastname,
 		Login:        login,
 		Email:        email,
+		RoleID:       defaultRoleID,
 		PasswordHash: string(hash),
 	}
 

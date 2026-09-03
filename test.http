@@ -16,7 +16,7 @@ Content-Type: application/json
 POST http://localhost:8080/users
 Content-Type: application/json
 
-{"first_name": "Иван", "last_name": "Iggg" , "login": "JJJJJJJEwd" , "email": "ivgga2ffn@mail.com", "password": "2ffdfdfdfdfd3"}
+{"first_name": "Иван", "last_name": "Тест" , "login": "JJJJJ22DDD2JJEwd" , "email": "ivgga2ffn@Dmail.com", "password": "2ffdfdfdfdfd3"}
 
 ###
 POST http://localhost:8080/login

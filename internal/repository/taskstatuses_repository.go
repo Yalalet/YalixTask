@@ -35,5 +35,9 @@ func (r *TaskStatusesRepository) GetAllTaskStatuses() ([]models.TaskStatus, erro
 		}
 		taskStatuses = append(taskStatuses, taskStatus)
 	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return taskStatuses, nil
 }

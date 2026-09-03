@@ -35,5 +35,9 @@ func (r *RoleRepository) GetAllRoles() ([]models.Role, error) {
 		}
 		roles = append(roles, role)
 	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return roles, nil
 }

@@ -25,5 +25,9 @@ func (r *TeamRepository) GetAllTeams() ([]models.Team, error) {
 		}
 		teams = append(teams, team)
 	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return teams, nil
 }

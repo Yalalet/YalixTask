@@ -17,6 +17,8 @@ func (h *TaskAssigneeHandler) TaskAssignees(w http.ResponseWriter, r *http.Reque
 		h.createTaskAssignee(w, r)
 	case "GET":
 		h.listTaskAssignees(w, r)
+	default:
+		http.Error(w, "метод не поддерживается", http.StatusMethodNotAllowed)
 	}
 }
 

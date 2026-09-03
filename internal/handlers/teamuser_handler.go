@@ -17,6 +17,8 @@ func (h *TeamUserHandler) TeamUsers(w http.ResponseWriter, r *http.Request) {
 		h.createTeamUser(w, r)
 	case "GET":
 		h.listTeamUsers(w, r)
+	default:
+		http.Error(w, "метод не поддерживается", http.StatusMethodNotAllowed)
 	}
 }
 

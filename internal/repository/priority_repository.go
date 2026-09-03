@@ -27,5 +27,9 @@ func (r *PriorityRepository) GetAllPriority() ([]models.Priority, error) {
 		}
 		prioritys = append(prioritys, priority)
 	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return prioritys, nil
 }

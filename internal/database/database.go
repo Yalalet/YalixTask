@@ -1,6 +1,9 @@
 package database
 
-import "database/sql"
+import (
+	"database/sql"
+	"log"
+)
 
 func Connect(connectionString string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", connectionString)
