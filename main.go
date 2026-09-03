@@ -98,8 +98,8 @@ func main() {
 	mux.HandleFunc("/taskstatuses", taskStatusHandler.TaskStatuses)
 	mux.HandleFunc("/teams", handlers.AuthMiddleware(teamHandler.Teams))
 	mux.HandleFunc("/tasks", handlers.AuthMiddleware(taskHandler.Tasks))
-	mux.HandleFunc("/taskassignees", taskAssigneeHandler.TaskAssignees)
-	mux.HandleFunc("/teamuser", teamUserHandler.TeamUsers)
+	mux.HandleFunc("/taskassignees", handlers.AdminOnlyMiddleware(handlers.AuthMiddleware(taskAssigneeHandler.TaskAssignees)))
+	mux.HandleFunc("/teamuser", handlers.AuthMiddleware(teamUserHandler.TeamUsers))
 
 	fmt.Println("Server is running on http://localhost:8080")
 	http.ListenAndServe(":8080", enableCORS(mux))

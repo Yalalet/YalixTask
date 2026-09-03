@@ -9,6 +9,24 @@ type TaskRepository struct {
 	DB *sql.DB // Add any necessary fields, such as a database connection
 }
 
+func (r *TaskRepository) UpdateTask(task *models.Task) error {
+	_, err := r.DB.Exec(
+		`UPDATE tasks SET name = $1, created_at = $2, deadline = $3, completed_at = $4, description = $5, team_id = $6, status_id = $7, priority_id = $8 WHERE id = $9`,
+		task.Name, task.CreatedAt, task.Deadline, task.CompletedAt, task.Description, task.TeamID, task.StatusID, task.PriorityID, task.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *TaskRepository) DeleteTask(id int) error {
+	_, err := r.DB.Exec(`DELETE FROM tasks WHERE id = $1`, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *TaskRepository) GetTaskByID(id int) (*models.Task, error) {
 	var task models.Task
 	err := r.DB.QueryRow(`SELECT id, name, created_at, deadline, completed_at, description, team_id, status_id, priority_id 

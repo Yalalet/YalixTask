@@ -14,6 +14,16 @@ func (s *TaskService) CreateTask(task *models.Task) error {
 	return err
 }
 
+func (s *TaskService) UpdateTask(task *models.Task) error {
+	err := s.Repo.UpdateTask(task)
+	return err
+}
+
+func (s *TaskService) DeleteTask(id int) error {
+	err := s.Repo.DeleteTask(id)
+	return err
+}
+
 func (s *TaskService) GetAllTasks() ([]models.Task, error) {
 	return s.Repo.GetAllTasks()
 }
