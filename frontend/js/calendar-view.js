@@ -22,18 +22,8 @@ const today = new Date();
 let currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 let viewMode = 'month';
 let selectedEventDate = null;
-
-const eventMap = new Map([
-  ['2026-08-04', [{ id: 1, title: 'Старт проекта', startDate: '2026-08-04', endDate: '2026-08-04', startTime: '09:00' }]],
-  ['2026-08-09', [{ id: 2, title: 'Встреча', startDate: '2026-08-09', endDate: '2026-08-09', startTime: '11:00' }]],
-  ['2026-08-14', [{ id: 3, title: 'Дедлайн', startDate: '2026-08-14', endDate: '2026-08-14', startTime: '17:00' }]],
-  ['2026-08-21', [{ id: 4, title: 'Проверка', startDate: '2026-08-21', endDate: '2026-08-21', startTime: '15:00' }]],
-  ['2026-08-28', [{ id: 5, title: 'Показ', startDate: '2026-08-28', endDate: '2026-08-28', startTime: '13:00' }]],
-  ['2026-09-03', [{ id: 6, title: 'Собрание', startDate: '2026-09-03', endDate: '2026-09-03', startTime: '10:30' }]],
-  ['2026-09-11', [{ id: 7, title: 'Планирование', startDate: '2026-09-11', endDate: '2026-09-11', startTime: '09:30' }]],
-  ['2026-09-18', [{ id: 8, title: 'Обзор', startDate: '2026-09-18', endDate: '2026-09-18', startTime: '12:00' }]],
-  ['2026-09-27', [{ id: 9, title: 'Демо', startDate: '2026-09-27', endDate: '2026-09-27', startTime: '16:00' }]]
-]);
+let isLoadingTasks = true;
+const eventMap = new Map();
 
 function dateKey(date) {
   const y = date.getFullYear();
@@ -116,6 +106,48 @@ function normalizeTaskList(value) {
   return [];
 }
 
+function normalizeTask(task) {
+  const deadline = typeof task.deadline === 'string' ? new Date(task.deadline) : null;
+  const validDeadline = deadline && !Number.isNaN(deadline.getTime()) ? deadline : null;
+  const deadlineDate = validDeadline ? dateKey(deadline) : '';
+
+  return {
+    ...task,
+    id: task.id,
+    title: task.name || task.title || 'Без названия',
+    startDate: deadlineDate,
+    endDate: deadlineDate,
+    startTime: validDeadline
+      ? `${String(validDeadline.getHours()).padStart(2, '0')}:${String(validDeadline.getMinutes()).padStart(2, '0')}`
+      : '09:00'
+  };
+}
+
+async function loadTasks() {
+  if (typeof apiRequest !== 'function') {
+    isLoadingTasks = false;
+    render();
+    return;
+  }
+
+  try {
+    const data = await apiRequest('/tasks', { method: 'GET' });
+    const tasks = Array.isArray(data) ? data : (data && Array.isArray(data.tasks) ? data.tasks : []);
+    eventMap.clear();
+    tasks.map(normalizeTask).forEach((task) => {
+      if (!task.startDate) return;
+      const existing = eventMap.get(task.startDate) || [];
+      existing.push(task);
+      eventMap.set(task.startDate, existing);
+    });
+  } catch (error) {
+    console.error('Tasks loading error:', error);
+  } finally {
+    isLoadingTasks = false;
+    render();
+  }
+}
+
 function getTasksForDate(date) {
   const key = dateKey(date);
   return normalizeTaskList(eventMap.get(key));
@@ -134,6 +166,14 @@ function renderTaskListForSelectedDate() {
 
   const tasks = sortTasksByTime(getTasksForDate(selectedEventDate));
   taskList.innerHTML = '';
+
+  if (isLoadingTasks) {
+    const loadingState = document.createElement('div');
+    loadingState.className = 'task-list-empty';
+    loadingState.textContent = 'Загрузка задач...';
+    taskList.appendChild(loadingState);
+    return;
+  }
 
   if (!tasks.length) {
     const emptyState = document.createElement('div');
@@ -159,43 +199,39 @@ function renderTaskListForSelectedDate() {
     info.appendChild(title);
     info.appendChild(meta);
 
-    const deleteBtn = document.createElement('button');
-    deleteBtn.type = 'button';
-    deleteBtn.className = 'task-delete-btn';
-    deleteBtn.textContent = 'Удалить';
-    deleteBtn.addEventListener('click', () => {
-      const key = dateKey(selectedEventDate);
-      const remaining = getTasksForDate(selectedEventDate).filter((itemTask) => itemTask.id !== task.id);
-      if (remaining.length === 0) {
-        eventMap.delete(key);
-      } else {
-        eventMap.set(key, remaining);
-      }
-      render();
-      renderTaskListForSelectedDate();
-    });
-
     item.appendChild(info);
-    item.appendChild(deleteBtn);
     taskList.appendChild(item);
   });
 }
 
-function addEventForDate(date, eventText, startDate, endDate, startTime) {
+async function addEventForDate(date, eventText, startDate, endDate, startTime) {
   const key = dateKey(date);
   const title = eventText && eventText.trim();
   if (!title) return;
 
-  const tasks = getTasksForDate(date);
-  tasks.push({
-    id: Date.now() + Math.random(),
-    title,
-    startDate: startDate || dateKey(date),
-    endDate: endDate || dateKey(date),
-    startTime: startTime || '09:00'
+  const deadline = `${endDate || startDate || key}T${startTime || '09:00'}:00`;
+  const savedTask = await apiRequest('/tasks', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: title,
+      created_at: new Date().toISOString(),
+      deadline,
+      description: '',
+      team_id: null,
+      status_id: 1,
+      priority_id: 1
+    })
   });
 
-  eventMap.set(key, tasks);
+  const task = normalizeTask(savedTask && savedTask.id ? savedTask : {
+    id: Date.now(),
+    name: title,
+    deadline
+  });
+  const taskKey = task.startDate || key;
+  const tasks = getTasksForDate(new Date(`${taskKey}T00:00:00`));
+  tasks.push(task);
+  eventMap.set(taskKey, tasks);
   render();
   renderTaskListForSelectedDate();
 }
@@ -423,7 +459,7 @@ eventModal?.addEventListener('click', (event) => {
   }
 });
 
-eventForm?.addEventListener('submit', (event) => {
+eventForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   if (!selectedEventDate) return;
@@ -443,13 +479,19 @@ eventForm?.addEventListener('submit', (event) => {
     return;
   }
 
-  addEventForDate(selectedEventDate, trimmedValue, startDate, endDate, startTime);
-  eventForm.reset();
-  eventStartDateInput.value = dateKey(selectedEventDate);
-  eventEndDateInput.value = dateKey(selectedEventDate);
-  eventStartTimeInput.value = '09:00';
-  eventTextInput.focus();
+  try {
+    await addEventForDate(selectedEventDate, trimmedValue, startDate, endDate, startTime);
+    eventForm.reset();
+    eventStartDateInput.value = dateKey(selectedEventDate);
+    eventEndDateInput.value = dateKey(selectedEventDate);
+    eventStartTimeInput.value = '09:00';
+    eventTextInput.focus();
+  } catch (error) {
+    console.error('Task creation error:', error);
+    alert(`Не удалось сохранить задачу: ${error.message || 'ошибка сервера'}`);
+  }
 });
 
 populateSelectors();
 render();
+loadTasks();

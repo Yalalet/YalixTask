@@ -16,7 +16,10 @@ function renderTeams(teams) {
   teamsList.innerHTML = '';
 
   if (!Array.isArray(teams) || teams.length === 0) {
-    teamsList.innerHTML = '<li class="people-empty">Команды не найдены.</li>';
+    const emptyState = document.createElement('li');
+    emptyState.className = 'people-empty';
+    emptyState.textContent = 'Команды не найдены.';
+    teamsList.appendChild(emptyState);
     teamsLoading.classList.add('hidden');
     teamsError.classList.add('hidden');
     return;
@@ -26,7 +29,10 @@ function renderTeams(teams) {
     const li = document.createElement('li');
     li.className = 'person-card';
 
-    const initials = (team.name || 'T')
+    const teamName = typeof team.name === 'string'
+      ? team.name
+      : (typeof team.first_name === 'string' ? team.first_name : '');
+    const initials = (teamName || 'T')
       .split(' ')
       .map((part) => part[0])
       .join('')
@@ -35,14 +41,28 @@ function renderTeams(teams) {
 
     const membersCount = Array.isArray(team.members) ? team.members.length : (team.members_count ?? (team.size ?? '—'));
 
-    li.innerHTML = `
-      <div class="person-avatar">${initials}</div>
-      <div class="person-info">
-        <div class="person-name">${team.name || 'Без названия'}</div>
-        <div class="person-login">Участников: ${membersCount}</div>
-      </div>
-      <span class="person-id">#${team.id ?? 'N/A'}</span>
-    `;
+    const avatar = document.createElement('div');
+    avatar.className = 'person-avatar';
+    avatar.textContent = initials || 'T';
+
+    const info = document.createElement('div');
+    info.className = 'person-info';
+
+    const name = document.createElement('div');
+    name.className = 'person-name';
+    name.textContent = teamName || 'Без названия';
+
+    const members = document.createElement('div');
+    members.className = 'person-login';
+    members.textContent = `Участников: ${membersCount}`;
+
+    info.append(name, members);
+
+    const id = document.createElement('span');
+    id.className = 'person-id';
+    id.textContent = `#${team.id ?? 'N/A'}`;
+
+    li.append(avatar, info, id);
 
     teamsList.appendChild(li);
   });

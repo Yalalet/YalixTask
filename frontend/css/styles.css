@@ -22,7 +22,7 @@ body{
   min-height: 100vh;
 }
 .page-shell{
-  width: calc(100% - 32px);
+  width: 100%;
   max-width: 1180px;
   min-height: 100vh;
   display:flex;
@@ -110,6 +110,43 @@ body{
   border-radius: 18px;
   padding: 28px 24px;
   box-shadow: 0 16px 40px rgba(2,8,12,0.28);
+}
+.profile-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  flex: 0 0 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(125,211,252,0.24), rgba(52,211,153,0.24));
+  border: 1px solid rgba(125,211,252,0.35);
+  color: var(--text);
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+.profile-login {
+  margin: 0;
+  color: rgba(237,249,255,0.65);
+}
+.profile-stats .info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.stat-label {
+  color: rgba(237,249,255,0.62);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.stat-value {
+  color: var(--accent);
+  font-size: 1.5rem;
 }
 .eyebrow {
   margin: 0 0 10px;
@@ -371,6 +408,10 @@ body{
   display: flex;
   flex-direction: column;
   gap: 10px;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
 }
 .calendar-day.muted {
   opacity: 0.4;
@@ -636,7 +677,7 @@ body{
 
 @media (max-width: 640px) {
   .page-shell {
-    width: calc(100% - 16px);
+    width: 100%;
     padding-top: 72px;
   }
   .calendar-shell {
