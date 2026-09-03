@@ -116,6 +116,31 @@ body{
   align-items: center;
   gap: 16px;
 }
+.profile-heading-content {
+  flex: 1;
+  min-width: 0;
+}
+.profile-settings-btn {
+  align-self: flex-start;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 9px;
+  background: rgba(255,255,255,0.03);
+  color: rgba(231,238,240,0.55);
+  font-size: 15px;
+  cursor: pointer;
+  transition: color .15s ease, border-color .15s ease, background .15s ease;
+}
+.profile-settings-btn:hover,
+.profile-settings-btn:focus-visible {
+  color: var(--accent);
+  border-color: rgba(159,214,194,0.35);
+  background: rgba(159,214,194,0.08);
+}
 .profile-avatar {
   width: 64px;
   height: 64px;

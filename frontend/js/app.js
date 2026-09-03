@@ -79,3 +79,10 @@ logoutBtn?.addEventListener('click', () => {
 
 renderProfile(storedUser);
 loadTaskCount();
+
+// Navigate to edit page when settings button is clicked
+const profileSettingsBtn = document.getElementById('profileSettingsBtn');
+profileSettingsBtn?.addEventListener('click', () => {
+  // open edit profile page
+  window.location.href = 'edit-profile.html';
+});
